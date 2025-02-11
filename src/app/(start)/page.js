@@ -17,9 +17,11 @@ export default function Home() {
 
   return (
     <article className="grid grid-rows-6 h-full">
-      <Logo />
+      <div className="row-start-4">
+        <Logo />
+      </div>
       {showBtn &&
-        <button className="mx-20">
+        <button className="mx-20 row-start-6">
           <Link href={"/login"}><Button text={"Kom i gang"} appear={true} /></Link>
         </button>
       }

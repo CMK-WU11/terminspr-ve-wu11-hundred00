@@ -57,8 +57,9 @@ export default async function Login(prevState, formData) {
         cookieStore.set("landrupdans_uid", data.userId, { maxAge: 60 * 60 * 24 })
 
     } catch (error) {
+        //fejlhandling logik har jeg taget fra repitationsøvelsen
         throw new Error(error)
     }
 
-    redirect("/aktiviteter")
+    redirect("/kalender")
 }

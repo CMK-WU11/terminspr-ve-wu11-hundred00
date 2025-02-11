@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-export default async function ActivityCard({ data }) {
+export default function ActivityCard({ data }) {
     const id = data?.id || "1"
     const name = data?.name || "Ukendt aktivitet"
     const imageUrl = data?.asset.url || "/images/placeholder.jpg"
