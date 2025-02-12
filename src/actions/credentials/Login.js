@@ -7,10 +7,11 @@ import { z } from "zod"
 export default async function Login(prevState, formData) {
     const username = formData.get("username")
     const password = formData.get("password")
+    const rememberMe = formData.get("rememberMe") === "on"
 
     const schema = z.object({
-        username: z.string().min(1, { message: "Du skal udfylde brugernavn feltet"}),
-        password: z.string().min(1, { message: "Du skal udfylde adgangskode feltet"})
+        username: z.string().min(1, { message: "Du skal udfylde brugernavn feltet" }),
+        password: z.string().min(1, { message: "Du skal udfylde adgangskode feltet" })
     })
 
     const validate = schema.safeParse({
@@ -40,21 +41,27 @@ export default async function Login(prevState, formData) {
             })
         })
 
-        if (response.status === 400) {
+        if (!response.ok) {
+            if ([400, 401].includes(response.status)) {
+                return {
+                    formData: { username, password },
+                    error: "Forkert email eller adgangskode"
+                }
+            }
+
             return {
-                formData: {
-                    username,
-                    password
-                },
-                error: "Forkert email eller adgangskode"
+                formData: { username, password },
+                error: `Noget gik galt, prøv igen senere`
             }
         }
 
         const data = await response.json()
-        
+
         const cookieStore = await cookies()
-        cookieStore.set("landrupdans_token", data.token, { maxAge: 60 * 60 * 24 })
-        cookieStore.set("landrupdans_uid", data.userId, { maxAge: 60 * 60 * 24 })
+        const cookieOptions = rememberMe ? { maxAge: 60 * 60 * 24 } : {}
+
+        cookieStore.set("landrupdans_token", data.token, cookieOptions)
+        cookieStore.set("landrupdans_uid", data.userId, cookieOptions)
 
     } catch (error) {
         //fejlhandling logik har jeg taget fra repitationsøvelsen

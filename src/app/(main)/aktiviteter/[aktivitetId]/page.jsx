@@ -21,12 +21,14 @@ export default async function ActivityPage({ params }) {
     const userData = await response.json()
 
     const name = data?.name || "Ukendt aktivitet"
-    const week = data?.weekday || "Mandag"
+    const week = data?.weekday || "mandag"
     const time = data?.time || "8:00"
     const description = data?.description || "Text"
     const imageUrl = data?.asset.url || "/images/placeholder.jpg"
     const minAge = data?.minAge || 10
     const maxAge = data?.maxAge || 20
+    const userAge = userData?.age || 0
+    const userActivities = userData?.activities || []
 
     const isLoggedIn = !!token
     const isJoined = userData?.activities?.some(activity => activity.id === Number(id)) || false
@@ -41,12 +43,17 @@ export default async function ActivityPage({ params }) {
                         activityId={id}
                         token={token}
                         isJoined={isJoined}
+                        userAge={userAge}
+                        userActivities={userActivities}
+                        activityWeekday={week}
+                        minAge={minAge}
+                        maxAge={maxAge}
                     />
                 }
             </section>
             <section className="py-3 px-6">
                 <h2 className="text-[24px]">{name}</h2>
-                <p className="text-sm">{week}: {time}</p>
+                <p className="text-sm capitalize">{week}: {time}</p>
                 <p>{minAge}-{maxAge} år</p>
                 <p className="pt-2">{description}</p>
             </section>

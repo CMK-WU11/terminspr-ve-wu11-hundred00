@@ -4,8 +4,8 @@ export default function ActivityCard({ data }) {
     const id = data?.id || "1"
     const name = data?.name || "Ukendt aktivitet"
     const imageUrl = data?.asset.url || "/images/placeholder.jpg"
-    const minAge = data?.minAge | 10
-    const maxAge = data?.maxAge | 20
+    const minAge = data?.minAge || 10
+    const maxAge = data?.maxAge || 20
 
     return (
         <Link href={`/aktiviteter/${id}`}>

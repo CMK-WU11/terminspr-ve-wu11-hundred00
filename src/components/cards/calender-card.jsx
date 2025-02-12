@@ -8,7 +8,7 @@ export default function CalendarCard({ data }) {
 
     return (
         <Link href={{ pathname: `/kalender/${id}`}}>
-            <article className="bg-mainWhite rounded-xl shadow-sm py-3 px-8 text-black overflow-hidden overflow-ellipsis pb-5 max-w-[22rem] whitespace-nowrap">
+            <article className="bg-mainWhite rounded-xl shadow-sm py-3 px-8 text-black overflow-hidden overflow-ellipsis pb-5 max-w-[22rem] whitespace-nowrap min-w-[22rem]">
                 <h2 className="text-[36px]">{name}</h2>
                 <h3>{week} {time}</h3>
             </article>

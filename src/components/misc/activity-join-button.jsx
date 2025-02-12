@@ -3,11 +3,28 @@
 import { useState, useTransition } from "react"
 import Button from "@/components/common/button"
 
-export default function JoinLeaveButton({ userId, activityId, token, isJoined }) {
+export default function JoinLeaveButton({ userId, activityId, token, isJoined, userAge, userActivities, activityWeekday, minAge, maxAge }) {
     const [joined, setJoined] = useState(isJoined)
     const [isPending, startTransition] = useTransition()
 
+    const isJoiningNewActivity = !joined
+    const ageRestricted = isJoiningNewActivity && userAge < minAge || userAge > maxAge
+    const weekdayConflict = isJoiningNewActivity && userActivities.some(activity => activity.weekday === activityWeekday)
+
+    const isDisabled = ageRestricted || weekdayConflict
+    let disabledMessage = ""
+
+    if (ageRestricted) {
+        disabledMessage = `Du skal være mellem ${minAge}-${maxAge} år for at deltage.`
+    } else if (weekdayConflict) {
+        disabledMessage = `Du er allerede tilmeldt en aktivitet på ${activityWeekday}.`
+    }
+
+
     const handleClick = () => {
+        //handleClick funciton har jeg taget fra en test opgave jeg lavede til migselv hjemmefra
+        if (isDisabled) return
+
         startTransition(async () => {
             const url = `http://localhost:4000/api/v1/users/${userId}/activities/${activityId}`
             const options = {
@@ -30,8 +47,8 @@ export default function JoinLeaveButton({ userId, activityId, token, isJoined })
     }
 
     return (
-        <button onClick={handleClick} disabled={isPending} className="absolute z-10 bottom-0 right-0 mb-5 mr-5">
-            <Button text={isPending ? "Vent..." : joined ? "Forlad" : "Tilmeld"} />
+        <button onClick={handleClick} disabled={isPending || isDisabled && isJoiningNewActivity} className="absolute z-10 bottom-0 right-0 mb-5 mr-5">
+            <Button text={isPending ? "Vent..." : joined ? "Forlad" : "Tilmeld"} disabled={isDisabled && isJoiningNewActivity ? disabledMessage : null} />
         </button>
     )
 }

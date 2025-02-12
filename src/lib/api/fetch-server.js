@@ -9,6 +9,7 @@ export async function fetchServer(url) {
 
         const contentType = response.headers.get("content-type");
         if (!contentType || !contentType.includes("application/json")) {
+            console.warn("Warning: response is not JSON.")
             return null
         }
 
