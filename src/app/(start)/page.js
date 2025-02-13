@@ -22,7 +22,7 @@ export default function Home() {
       </div>
       {showBtn &&
         <button className="mx-20 row-start-6">
-          <Link href={"/login"}><Button text={"Kom i gang"} appear={true} /></Link>
+          <Link href={"/aktiviteter"}><Button text={"Kom i gang"} appear={true} /></Link>
         </button>
       }
     </article>

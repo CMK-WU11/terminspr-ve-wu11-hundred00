@@ -5,6 +5,9 @@ import { redirect } from "next/navigation"
 import { z } from "zod"
 
 export default async function Login(prevState, formData) {
+    //Fejlhandling logik og zod validering har jeg taget og modificeret fra repitationsøvelsen
+    //https://github.com/CMK-WU11/repetition
+
     const username = formData.get("username")
     const password = formData.get("password")
     const rememberMe = formData.get("rememberMe") === "on"
@@ -51,7 +54,7 @@ export default async function Login(prevState, formData) {
 
             return {
                 formData: { username, password },
-                error: `Noget gik galt, prøv igen senere`
+                error: "Noget gik galt, prøv igen senere"
             }
         }
 
@@ -64,7 +67,6 @@ export default async function Login(prevState, formData) {
         cookieStore.set("landrupdans_uid", data.userId, cookieOptions)
 
     } catch (error) {
-        //fejlhandling logik har jeg taget fra repitationsøvelsen
         throw new Error(error)
     }
 

@@ -10,15 +10,27 @@ export default async function ActivityPage({ params }) {
     const uid = cookieStore.get("landrupdans_uid")?.value
 
     const data = await fetchServer(`http://localhost:4000/api/v1/activities/${id}`)
-    const response = await fetch(`http://localhost:4000/api/v1/users/${uid}`, {
-        method: "GET",
-        headers: {
-            Authorization: "Bearer " + token
-        }
-    })
 
-    if (!response.ok) { throw new Error("failed to fetch user data") }
-    const userData = await response.json()
+    let userData = null
+    let userAge = null
+    let userActivities = []
+    let isJoined = false
+
+    if (token && uid) {
+        const response = await fetch(`http://localhost:4000/api/v1/users/${uid}`, {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        })
+
+        if (response.ok) {
+            userData = await response.json()
+            userAge = userData?.age || 0
+            userActivities = userData?.activities || []
+            isJoined = userActivities.some((activity) => activity.id === Number(id))
+        }
+    }
 
     const name = data?.name || "Ukendt aktivitet"
     const week = data?.weekday || "mandag"
@@ -27,18 +39,13 @@ export default async function ActivityPage({ params }) {
     const imageUrl = data?.asset.url || "/images/placeholder.jpg"
     const minAge = data?.minAge || 10
     const maxAge = data?.maxAge || 20
-    const userAge = userData?.age || 0
-    const userActivities = userData?.activities || []
-
-    const isLoggedIn = !!token
-    const isJoined = userData?.activities?.some(activity => activity.id === Number(id)) || false
 
     return (
         <article>
             <section className="relative">
                 <img src={imageUrl} className="" />
-                {isLoggedIn &&
-                    <JoinLeaveButton
+                {token && uid &&
+                    (<JoinLeaveButton
                         userId={uid}
                         activityId={id}
                         token={token}
@@ -49,7 +56,7 @@ export default async function ActivityPage({ params }) {
                         minAge={minAge}
                         maxAge={maxAge}
                     />
-                }
+                    )}
             </section>
             <section className="py-3 px-6">
                 <h2 className="text-[24px]">{name}</h2>
