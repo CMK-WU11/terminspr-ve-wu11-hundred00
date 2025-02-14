@@ -2,10 +2,12 @@
 
 import { useState, useTransition } from "react"
 import Button from "@/components/common/button"
+import { useRouter } from "next/navigation"
 
 export default function JoinLeaveButton({ userId, activityId, token, isJoined, userAge, userActivities, activityWeekday, minAge, maxAge }) {
     const [joined, setJoined] = useState(isJoined)
     const [isPending, startTransition] = useTransition()
+    const router = useRouter()
 
     const isJoiningNewActivity = !joined
     const ageRestricted = isJoiningNewActivity && userAge < minAge || userAge > maxAge
@@ -40,6 +42,8 @@ export default function JoinLeaveButton({ userId, activityId, token, isJoined, u
                 if (!response.ok) throw new Error("failed to update activity status")
 
                 setJoined(!joined)
+
+                router.refresh()
             } catch (error) {
                 console.error("error updating activity status: ", error)
             }

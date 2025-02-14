@@ -43,7 +43,7 @@ export default async function ActivityPage({ params }) {
     return (
         <article>
             <section className="relative">
-                <img src={imageUrl} className="" />
+                <img src={imageUrl} alt={`Billede af personer der er i gang med ${name}`} loading="lazy" className="" />
                 {token && uid &&
                     (<JoinLeaveButton
                         userId={uid}
