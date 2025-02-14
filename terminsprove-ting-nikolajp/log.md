@@ -28,5 +28,5 @@ Eftermiddag - 15:39 (JEG GLEMTE AT PUSHE MEN STOPPEDE MED AT ARBEJDE 15:39)
 
 ## Dag 5
 
-Morgen - (tidspunkt)  
+Morgen - 8:17
 Eftermiddag - (tidspunkt)
